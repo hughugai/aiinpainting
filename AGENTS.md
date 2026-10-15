@@ -13,7 +13,8 @@
 
 - `paper-lab/` — 论文算法复现（JS + Python 双实现 + ONNX 推理），来自网站仓库 `codex/inpainting-paper-lab` 分支；详细说明见 `paper-lab/README.md`
 - `feature-inpainting/` — 李旭峰等 2016《特征优先块匹配图像修复算法》的验证参考实现（inpaint.js / inpaint.py），`core.ts` 是网站 `src/lib/inpaint/core.ts` 的移植副本（含 texture-aware source selection 新特性）
-- `tests/` — 根级回归测试（Node 内置 test runner），当前测试 `feature-inpainting/core.ts` 的纹理感知源选择
+- `eval-lab/` — 确定性基准评估：从 Hugging Face（Places365-val / CelebA-HQ / InpaintCOCO）按固定 offset 抽取 50 张图 + 4 类掩码（small/thin/large/object），PSNR/SSIM 指标，JSON+MD 报告与 baseline 差分。下载图片因许可证不入库（gitignored），manifest.json 记录 sha256 锚定复现；优化算法时用它做回归对比（`npm run eval:prepare` / `npm run eval:run`）
+- `tests/` — 根级回归测试（Node 内置 test runner），当前测试 `feature-inpainting/core.ts` 的纹理感知源选择与 `eval-lab` 的指标/掩码生成
 - `scripts/prepare-onnx.mjs` — postinstall 拷贝 ONNX Runtime WASM
 
 注意：`paper-lab` 内部代码通过 `../feature-inpainting` 相对路径引用参考实现，两者必须保持同级目录关系。

@@ -7,12 +7,16 @@
     "postinstall": "node scripts/prepare-onnx.mjs",
     "test": "node --test tests/*.test.mjs",
     "test:papers": "python3 paper-lab/tests/verify.py",
-    "verify:feature": "python3 feature-inpainting/verify.py"
+    "verify:feature": "python3 feature-inpainting/verify.py",
+    "eval:prepare": "node eval-lab/prepare.mjs",
+    "eval:run": "node eval-lab/run.mjs"
   },
   "dependencies": {
     "onnxruntime-web": "^1.30.0"
   },
   "devDependencies": {
+    "jpeg-js": "^0.4.4",
+    "pngjs": "^7.0.0",
     "typescript": "^5"
   }
 }

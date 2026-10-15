@@ -12,6 +12,12 @@ __pycache__/
 onnx-runtime/
 models/*.onnx
 
+# eval-lab: downloaded dataset images, generated masks, run outputs, tsc cache
+eval-lab/datasets/images/
+eval-lab/datasets/masks/
+eval-lab/work/
+eval-lab/.cache/
+
 # misc
 .DS_Store
 npm-debug.log*
