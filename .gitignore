@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+
+# build artifacts
+*.tsbuildinfo
+
+# python
+__pycache__/
+*.pyc
+
+# generated ONNX runtime and locally supplied model weights
+onnx-runtime/
+models/*.onnx
+
+# misc
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# env files
+.env*

@@ -1,0 +1,22 @@
+{
+  "passed_cases": 27,
+  "rgb_parity": "exact",
+  "trace_numeric_tolerance": 1e-09,
+  "known_pixels": "unchanged",
+  "masked_input_values": "ignored",
+  "synthetic_metrics": {
+    "feature": {
+      "iterations": 10,
+      "masked_mse": 0.0,
+      "masked_psnr_db": null,
+      "exact_mask_recovery": true
+    },
+    "criminisi": {
+      "iterations": 12,
+      "masked_mse": 0.0,
+      "masked_psnr_db": null,
+      "exact_mask_recovery": true
+    }
+  },
+  "paper_benchmark": "not reproduced: original images/masks unavailable"
+}

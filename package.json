@@ -1,0 +1,18 @@
+{
+  "name": "aiinpainting-research",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "postinstall": "node scripts/prepare-onnx.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:papers": "python3 paper-lab/tests/verify.py",
+    "verify:feature": "python3 feature-inpainting/verify.py"
+  },
+  "dependencies": {
+    "onnxruntime-web": "^1.30.0"
+  },
+  "devDependencies": {
+    "typescript": "^5"
+  }
+}
