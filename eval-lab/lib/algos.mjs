@@ -45,6 +45,23 @@ async function classical() {
   return import(join(ROOT, 'paper-lab', 'js', 'classical.js'));
 }
 
+/** ONNX deep baselines (LaMa / MI-GAN) via paper-lab's onnx.js + onnxruntime-web WASM.
+ * Weights live in models/*.onnx (gitignored); sessions are lazy singletons. */
+const ONNX_FILES = { lama: 'lama_fp32.onnx', migan: 'migan_pipeline_v2.onnx' };
+const onnxRunners = {};
+async function getOnnx(method) {
+  if (!onnxRunners[method]) {
+    const ort = await import('onnxruntime-web/wasm');
+    ort.env.wasm.numThreads = 1;
+    ort.env.wasm.wasmPaths = join(ROOT, 'node_modules', 'onnxruntime-web', 'dist') + '/';
+    const { createOnnxInpainter } = await import(join(ROOT, 'paper-lab', 'js', 'onnx.js'));
+    const { readFile } = await import('node:fs/promises');
+    const model = new Uint8Array(await readFile(join(ROOT, 'models', ONNX_FILES[method])));
+    onnxRunners[method] = await createOnnxInpainter(ort, method, model);
+  }
+  return onnxRunners[method];
+}
+
 export const ALGOS = {
   'feature': {
     label: 'feature (core.ts, texture-aware on)',
@@ -81,6 +98,14 @@ export const ALGOS = {
   'patchmatch': {
     label: 'PatchMatch (simplified Barnes 2009)',
     run: async (rgb, mask, w, h) => (await classical()).inpaint('patchmatch', rgb, mask, w, h),
+  },
+  'lama': {
+    label: 'LaMa (ONNX fp32, 512 pad, Carve export)',
+    run: async (rgb, mask, w, h) => (await getOnnx('lama')).run(rgb, mask, w, h),
+  },
+  'migan': {
+    label: 'MI-GAN (ONNX pipeline v2)',
+    run: async (rgb, mask, w, h) => (await getOnnx('migan')).run(rgb, mask, w, h),
   },
 };
 

@@ -15,6 +15,7 @@ models/*.onnx
 # eval-lab: downloaded dataset images, generated masks, run outputs, tsc cache
 eval-lab/datasets/images/
 eval-lab/datasets/masks/
+eval-lab/datasets/inpaintcoco/
 eval-lab/work/
 eval-lab/.cache/
 
