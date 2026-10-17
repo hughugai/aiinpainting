@@ -1,5 +1,5 @@
-import {inpaint} from '../js/classical.js';
-import {packInputs} from '../js/onnx.js';
+import {inpaint} from '../algorithms/js/classical.js';
+import {packInputs} from '../algorithms/js/onnx.js';
 let text='';for await(const chunk of process.stdin)text+=chunk;
 const cases=JSON.parse(text);
 const results=cases.map(({method,rgb,mask,w,h,options={}})=>{

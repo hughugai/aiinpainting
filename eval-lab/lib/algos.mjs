@@ -3,7 +3,7 @@
  * feature-plain  core.ts, texture-aware off                  — quantifies the new feature
  * shifted        core.ts ablation (priority without feature bonus)
  * criminisi      core.ts Criminisi-mode baseline
- * telea / bertalmio / efros-leung / patchmatch — paper-lab classical baselines
+ * telea / bertalmio / efros-leung / patchmatch — algorithms/js classical baselines
  */
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, statSync, writeFileSync } from 'node:fs';
@@ -17,13 +17,13 @@ const ROOT = join(LAB, '..', '..');
 let coreInpaint = null;
 let refInpaint = null;
 
-/** Compile feature-inpainting/core.ts once (tsc) and cache it in eval-lab/.cache. */
+/** Compile algorithms/js/core.ts once (tsc) and cache it in eval-lab/.cache. */
 function loadCore() {
   if (coreInpaint) return coreInpaint;
   const outDir = join(LAB, '..', '.cache');
   mkdirSync(outDir, { recursive: true });
   writeFileSync(join(outDir, 'package.json'), '{"type":"commonjs"}');
-  const src = join(ROOT, 'feature-inpainting', 'core.ts');
+  const src = join(ROOT, 'algorithms', 'js', 'core.ts');
   const dst = join(outDir, 'core.js');
   let stale = true;
   try { stale = statSync(src).mtimeMs > statSync(dst).mtimeMs; } catch { /* not built yet */ }
@@ -37,15 +37,15 @@ function loadCore() {
 
 function loadRef() {
   if (refInpaint) return refInpaint;
-  refInpaint = import(join(ROOT, 'feature-inpainting', 'inpaint.js')).then(m => m.inpaint);
+  refInpaint = import(join(ROOT, 'algorithms', 'js', 'inpaint.js')).then(m => m.inpaint);
   return refInpaint;
 }
 
 async function classical() {
-  return import(join(ROOT, 'paper-lab', 'js', 'classical.js'));
+  return import(join(ROOT, 'algorithms', 'js', 'classical.js'));
 }
 
-/** ONNX deep baselines (LaMa / MI-GAN) via paper-lab's onnx.js + onnxruntime-web WASM.
+/** ONNX deep baselines (LaMa / MI-GAN) via algorithms/js/onnx.js + onnxruntime-web WASM.
  * Weights live in models/*.onnx (gitignored); sessions are lazy singletons. */
 const ONNX_FILES = { lama: 'lama_fp32.onnx', migan: 'migan_pipeline_v2.onnx' };
 const onnxRunners = {};
@@ -54,7 +54,7 @@ async function getOnnx(method) {
     const ort = await import('onnxruntime-web/wasm');
     ort.env.wasm.numThreads = 1;
     ort.env.wasm.wasmPaths = join(ROOT, 'node_modules', 'onnxruntime-web', 'dist') + '/';
-    const { createOnnxInpainter } = await import(join(ROOT, 'paper-lab', 'js', 'onnx.js'));
+    const { createOnnxInpainter } = await import(join(ROOT, 'algorithms', 'js', 'onnx.js'));
     const { readFile } = await import('node:fs/promises');
     const model = new Uint8Array(await readFile(join(ROOT, 'models', ONNX_FILES[method])));
     onnxRunners[method] = await createOnnxInpainter(ort, method, model);

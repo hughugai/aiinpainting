@@ -1,7 +1,7 @@
 /**
  * Feature-priority patch matching inpainting core.
  *
- * Ported from feature-inpainting/inpaint.js (verified reference implementation
+ * Ported from algorithms/js/inpaint.js (verified reference implementation
  * of 李旭峰 et al. 2016, 《特征优先块匹配图像修复算法》). The algorithm logic is
  * defaults preserve the reference scoring. The interactive tool additionally
  * enables texture-aware source selection for removal tasks.

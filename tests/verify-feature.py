@@ -4,13 +4,16 @@ import subprocess
 from pathlib import Path
 import numpy as np
 from PIL import Image,ImageDraw
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'algorithms'/'python'))
 from inpaint import inpaint
 ROOT=Path(__file__).resolve().parent
+DEMO=ROOT.parent/'algorithms'/'js'/'demo'
 
 def js(image,mask,options):
     payload={'rgb':image.reshape(-1).tolist(),'mask':mask.reshape(-1).astype(int).tolist(),
              'width':image.shape[1],'height':image.shape[0],'options':options}
-    return json.loads(subprocess.check_output(['node',str(ROOT/'run-json.mjs')],input=json.dumps(payload).encode(),stderr=subprocess.PIPE))
+    return json.loads(subprocess.check_output(['node',str(ROOT/'run-feature-json.mjs')],input=json.dumps(payload).encode(),stderr=subprocess.PIPE))
 
 def compare(image,mask,method='feature',update='raw',patch=5,lam=.35):
     out,t=inpaint(image,mask,patch=patch,method=method,confidence_update=update,lam=lam)
@@ -58,18 +61,18 @@ def main():
     im=Image.new('RGB',(64,48),(170,200,220));draw=ImageDraw.Draw(im)
     for y in range(0,48,8):draw.rectangle((0,y,63,y+2),fill=(30,65,95))
     arr=np.array(im);m=np.zeros((48,64),bool);m[17:30,26:39]=True
-    Path(ROOT/'examples').mkdir(exist_ok=True)
-    im.save(ROOT/'examples/original.png');Image.fromarray(m.astype(np.uint8)*255).save(ROOT/'examples/mask.png')
-    damaged=arr.copy();damaged[m]=[255,65,65];Image.fromarray(damaged).save(ROOT/'examples/damaged.png')
+    Path(DEMO/'examples').mkdir(parents=True,exist_ok=True)
+    im.save(DEMO/'examples/original.png');Image.fromarray(m.astype(np.uint8)*255).save(DEMO/'examples/mask.png')
+    damaged=arr.copy();damaged[m]=[255,65,65];Image.fromarray(damaged).save(DEMO/'examples/damaged.png')
     metrics={}
     for method in ('feature','criminisi'):
         out,t=compare(arr,m,method,patch=9);cases+=1
-        Image.fromarray(out).save(ROOT/f'examples/{method}.png')
+        Image.fromarray(out).save(DEMO/f'examples/{method}.png')
         mse=float(np.mean((out[m].astype(float)-arr[m])**2));metrics[method]={'iterations':len(t),'masked_mse':mse,'masked_psnr_db':None if mse==0 else float(10*np.log10(255**2/mse)),'exact_mask_recovery':mse==0}
     panel=Image.new('RGB',(64*4,48))
-    for j,name in enumerate(('original','damaged','criminisi','feature')):panel.paste(Image.open(ROOT/f'examples/{name}.png'),(j*64,0))
-    panel.resize((1024,192),Image.Resampling.NEAREST).save(ROOT/'examples/comparison.png')
+    for j,name in enumerate(('original','damaged','criminisi','feature')):panel.paste(Image.open(DEMO/f'examples/{name}.png'),(j*64,0))
+    panel.resize((1024,192),Image.Resampling.NEAREST).save(DEMO/'examples/comparison.png')
     report={'passed_cases':cases,'rgb_parity':'exact','trace_numeric_tolerance':1e-9,'known_pixels':'unchanged','masked_input_values':'ignored','synthetic_metrics':metrics,'paper_benchmark':'not reproduced: original images/masks unavailable'}
-    (ROOT/'verification.json').write_text(json.dumps(report,indent=2))
+    (ROOT/'verification-feature.json').write_text(json.dumps(report,indent=2))
     print(json.dumps(report,indent=2))
 if __name__=='__main__':main()

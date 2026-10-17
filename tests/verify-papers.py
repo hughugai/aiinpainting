@@ -4,11 +4,11 @@ from pathlib import Path
 import subprocess
 import sys
 import numpy as np
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'python'))
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'algorithms'/'python'))
 from classical import inpaint
 from onnx_inpaint import pack_inputs
 
-root=Path(__file__).resolve().parents[2]
+root=Path(__file__).resolve().parents[1]
 cases=[]
 for shape in ('center','edge','crack','disconnected','empty'):
     h,w=13,17
@@ -24,7 +24,7 @@ for shape in ('center','edge','crack','disconnected','empty'):
         if method=='bertalmio':options={'iterations':20}
         if method=='patchmatch':options['iterations']=3
         cases.append(dict(method=method,rgb=image.ravel().tolist(),mask=mask.ravel().tolist(),w=w,h=h,options=options))
-result=subprocess.run(['node',str(root/'paper-lab/tests/run-js.mjs')],input=json.dumps(cases),capture_output=True,text=True,check=True)
+result=subprocess.run(['node',str(root/'tests/run-js.mjs')],input=json.dumps(cases),capture_output=True,text=True,check=True)
 js=json.loads(result.stdout)
 for case,actual in zip(cases,js):
     assert 'error' not in actual,(case['method'],actual)

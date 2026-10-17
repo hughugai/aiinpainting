@@ -10,7 +10,7 @@ test('removal rejects a matching source rim with text hidden inside', () => {
   const output = mkdtempSync(join(tmpdir(), 'inpaint-test-'));
   try {
     execFileSync('node_modules/.bin/tsc', [
-      'feature-inpainting/core.ts', '--outDir', output,
+      'algorithms/js/core.ts', '--outDir', output,
       '--module', 'commonjs', '--target', 'es2020', '--skipLibCheck',
     ]);
     const { inpaint } = createRequire(import.meta.url)(join(output, 'core.js'));

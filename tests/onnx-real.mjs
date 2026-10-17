@@ -1,8 +1,8 @@
-/** Optional: node paper-lab/tests/onnx-real.mjs method /absolute/model.onnx
+/** Optional: node tests/onnx-real.mjs method /absolute/model.onnx
  * Tests actual WASM graph inference outside the UI; weights are not bundled.
  */
 import * as ort from 'onnxruntime-web/wasm';
-import {createOnnxInpainter} from '../js/onnx.js';
+import {createOnnxInpainter} from '../algorithms/js/onnx.js';
 import {readFile,writeFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 const [method,path]=process.argv.slice(2);

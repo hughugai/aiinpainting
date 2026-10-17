@@ -3,11 +3,11 @@ import subprocess
 import sys
 from pathlib import Path
 import numpy as np
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'python'))
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'algorithms'/'python'))
 from onnx_inpaint import inpaint_onnx
 method,path=sys.argv[1:]
-root=Path(__file__).resolve().parents[2]
-subprocess.run(['node','paper-lab/tests/onnx-real.mjs',method,path],cwd=root,check=True)
+root=Path(__file__).resolve().parents[1]
+subprocess.run(['node','tests/onnx-real.mjs',method,path],cwd=root,check=True)
 w,h=64,48
 image=np.zeros((h,w,3),np.uint8)
 mask=np.zeros((h,w),np.uint8)

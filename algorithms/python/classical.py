@@ -1,4 +1,4 @@
-"""Independent Python counterparts of js/classical.js; see paper-lab/README.md."""
+"""Independent Python counterparts of js/classical.js; see algorithms/README.md."""
 import heapq
 import math
 import numpy as np

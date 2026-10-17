@@ -6,8 +6,8 @@
   "scripts": {
     "postinstall": "node scripts/prepare-onnx.mjs",
     "test": "node --test tests/*.test.mjs",
-    "test:papers": "python3 paper-lab/tests/verify.py",
-    "verify:feature": "python3 feature-inpainting/verify.py",
+    "test:papers": "python3 tests/verify-papers.py",
+    "verify:feature": "python3 tests/verify-feature.py",
     "eval:prepare": "node eval-lab/prepare.mjs",
     "eval:run": "node eval-lab/run.mjs"
   },

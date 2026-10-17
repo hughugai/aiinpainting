@@ -1,28 +1,29 @@
 # aiinpainting research
 
-Open research repository for image inpainting algorithms — reference implementations, paper reimplementations, and reproducible tests. Companion project of **[aiinpainting.app](https://aiinpainting.app)** — a free online AI inpainting tool for object removal, watermark & text removal, and photo repair.
+Open research repository for image inpainting algorithms — papers, reference implementations, reproducible tests, and a deterministic benchmark. Companion project of **[aiinpainting.app](https://aiinpainting.app)** — a free online AI inpainting tool for object removal, watermark & text removal, and photo repair.
 
 ## What's inside
 
 | Directory | Description |
 |---|---|
-| [`paper-lab/`](paper-lab/) | Independent JS + Python implementations of classic and neural inpainting methods — Efros–Leung (1999), Bertalmío (2000), Criminisi (2003), Telea (2004), PatchMatch (2009), feature-priority exemplar (2016), plus LaMa / MI-GAN pretrained ONNX inference — with cross-language verification tests |
-| [`feature-inpainting/`](feature-inpainting/) | Verified reference implementation of the feature-priority block-matching inpainting algorithm (李旭峰 et al. 2016), with browser demo, Python/JS cores, and example images |
-| [`eval-lab/`](eval-lab/) | Deterministic benchmark harness: 50 images sampled from Hugging Face datasets (Places365-val, CelebA-HQ, InpaintCOCO), 4 mask tiers per image, PSNR/SSIM metrics, JSON + Markdown reports with baseline diffing |
-| [`tests/`](tests/) | Regression tests, including texture-aware source selection and eval-lab metrics/mask generators |
+| [`papers/`](papers/README.md) | Source papers behind every implementation — links and one-line notes (Efros–Leung 1999, Bertalmío 2000, Criminisi 2003, Telea 2004, PatchMatch 2009, 李旭峰 2016, LaMa, MI-GAN, DeepFillv2, HiFill) |
+| [`algorithms/`](algorithms/README.md) | Core algorithms in JS + Python: classic methods (Efros–Leung, Bertalmío, Criminisi, Telea, PatchMatch), the feature-priority exemplar core (李旭峰 et al. 2016) with browser demo, and LaMa / MI-GAN pretrained ONNX inference |
+| [`tests/`](tests/README.md) | Cross-language verification (JS/Python parity, invariants, determinism) and Node regression tests |
+| [`eval-lab/`](eval-lab/README.md) | Deterministic benchmark: 50 Hugging Face images × 4 mask tiers, PSNR/SSIM, JSON + Markdown reports with baseline diffing |
+| [`models/`](models/) | Local pretrained ONNX weights (gitignored — download separately; see [`papers/README.md`](papers/README.md)) |
 
 ## Quick start
 
 ```sh
 npm install          # also copies the pinned ONNX Runtime WASM into onnx-runtime/
 npm test             # Node regression tests (source selection, eval metrics, masks)
-npm run test:papers  # cross-language (JS/Python) verification of paper-lab methods
-npm run verify:feature  # verification suite for the feature-priority reference core
+npm run test:papers  # cross-language (JS/Python) verification of the classic methods
+npm run verify:feature  # consistency suite for the 2016 feature-priority reference core
 npm run eval:prepare # download the 50-image benchmark from Hugging Face + generate masks
 npm run eval:run     # run all algorithms over the benchmark, write eval-lab/reports/
 ```
 
-Python methods need NumPy + Pillow: `pip install -r paper-lab/python/requirements.txt`.
+Python methods need NumPy + Pillow: `pip install -r algorithms/python/requirements.txt`.
 
 ## Scope & honesty
 
@@ -30,4 +31,4 @@ This is a selected collection of algorithms for study and comparison — not a c
 
 ## License
 
-MIT — see [LICENSE](LICENSE). Upstream model weights follow their own licenses (see [`paper-lab/README.md`](paper-lab/README.md)).
+MIT — see [LICENSE](LICENSE). Upstream model weights follow their own licenses (see [`algorithms/README.md`](algorithms/README.md)).
