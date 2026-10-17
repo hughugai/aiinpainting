@@ -1,1 +1,0 @@
-{"name":"feature-precedence-inpainting","private":true,"type":"module","scripts":{"test":"python3 verify.py"}}
